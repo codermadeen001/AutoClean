@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Wash Locations - WashHub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --primary-light: #2c5282;
+            --secondary: #ff6b35;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            height: 100vh;
+            width: 250px;
+            background-color: var(--primary);
+            color: var(--white);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem 1.5rem;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .sidebar-brand span {
+            color: var(--secondary);
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu a {
+            padding: 0.8rem 1.5rem;
+            color: var(--white);
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: var(--secondary);
+            color: var(--white);
+            border-left: 4px solid var(--white);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-header {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        /* User Profile in Sidebar */
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .user-profile img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        
+        .user-profile h6 {
+            color: var(--white);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+        
+        .user-profile p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+        
+        /* Location Cards */
+        .location-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+        
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .location-card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .location-card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0;
+        }
+        
+        .location-card-body {
+            padding: 20px;
+        }
+        
+        .location-url {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .location-url i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .location-url a {
+            color: var(--primary);
+            text-decoration: none;
+            word-break: break-all;
+        }
+        
+        .location-url a:hover {
+            text-decoration: underline;
+        }
+        
+        .location-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .search-container input {
+            padding-left: 40px;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 50px;
+            font-size: 1rem;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        /* Stats Cards */
+        .stats-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+        }
+        
+        .toast {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: none;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                transform: translateX(0);
+            }
+            
+            .sidebar.expanded {
+                width: 250px;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-brand span,
+            .sidebar:not(.expanded) .menu-header,
+            .sidebar:not(.expanded) .sidebar-menu a span,
+            .sidebar:not(.expanded) .user-profile h6,
+            .sidebar:not(.expanded) .user-profile p {
+                display: none;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-menu a {
+                text-align: center;
+                padding: 0.8rem;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.25rem;
+            }
+            
+            .sidebar:not(.expanded) .user-profile {
+                padding: 1rem 0;
+                text-align: center;
+            }
+            
+            .sidebar:not(.expanded) .user-profile img {
+                margin: 0 auto 0.5rem;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .main-content.expanded {
+                margin-left: 250px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .sidebar {
+                width: 0;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.expanded {
+                width: 250px;
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .main-content.expanded {
+                margin-left: 0;
+            }
+            
+            .location-actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .location-actions .btn {
+                width: 100%;
+            }
+        }
+
+        /* Add these styles to your existing CSS */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* Hide overflow from the entire sidebar */
+}
+
+.sidebar-header {
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.user-profile {
+    flex-shrink: 0; /* Prevent user profile from shrinking */
+}
+
+.sidebar-menu {
+    flex-grow: 1; /* Allow menu to grow and fill available space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: thin; /* For Firefox */
+}
+
+/* Custom scrollbar styling (optional) */
+.sidebar-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+ /* Modal Styles */
+        .modal-header {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: var(--primary-light) !important;
+            border-color: var(--primary-light) !important;
+        }
+
+
+        /* Toast Notifications */
+        :root{
+             --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --dark-gray: #343a40;
+        }
+
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 400px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+.toast-error {
+    background-color: var(--danger);
+    color: white;
+    padding: 12px 15px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toast-success {
+    background-color: white;
+    color: var(--success);
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--success);
+}
+
+.toast-success strong {
+    color: var(--success);
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.toast-message {
+    flex-grow: 1;
+    color: var(--success);
+}
+
+.toast-body {
+    background-color: white;
+    padding: 12px 15px;
+    color: var(--dark-gray);
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+
+
+
+    </style>
+
+
+
+    
+</body>
+<div class="toast-container"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">Auto<span>Clean</span></a>
+        </div>
+        
+        <div class="user-profile">
+            <img src="" alt="" class="userProfile">
+            <h6 class="userName">Loading...</h6>
+            <p class="userEmail">Loading...</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <p class="menu-header">Main</p>
+            <a href="index.html" id="dashboard-link">
+    <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+</a>
+<a href="packages.html"  id="packages-link">
+    <i class="fas fa-box-open"></i> <span>Packages</span>
+</a>
+<a href="location.html" class="active" id="washpoints-link">
+    <i class="fas fa-map-marker-alt"></i> <span>Wash Points</span>
+</a>
+<a href="car_detailers.html" id="vehicles-link">
+    <i class="fas fa-car"></i> <span>Car Detailers</span>
+</a>
+<a href="clients.html"  id="clients-link">
+    <i class="fas fa-users"></i> <span>Clients</span>
+</a>
+<a href="feedback.html" id="feedback-link">
+    <i class="fas fa-comments"></i> <span>Feedback</span>
+</a>
+<a href="report.html" id="report-link">
+    <i class="fas fa-chart-bar"></i> <span>Report</span>
+</a>
+<a href="#" id="logout-link" onclick="logout()">
+    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="container-fluid">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="page-title">
+                    <i class="fas fa-map-marker-alt me-2"></i> Wash Points
+                </h3>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLocationModal">
+                    <i class="fas fa-plus me-2"></i> Add Location
+                </button>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stat-value" id="totalLocations">0</div>
+                        <p class="stat-label">Total Locations</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stat-value" id="activeLocations">0</div>
+                        <p class="stat-label">Active Locations</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="form-control" id="searchLocations" placeholder="Search locations...">
+            </div>
+            
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+            </div>
+            
+            <!-- Locations Grid -->
+            <div class="row" id="locationsGrid">
+                <!-- Location cards will be dynamically inserted here -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="noLocations" class="empty-state" style="display: none;">
+                <i class="fas fa-map-marker-alt">🚫</i>
+                <h4>No wash points found</h4>
+                <p>Add your first car wash location to get started.</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLocationModal">
+                    <i class="fas fa-plus me-2"></i> Add Location
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Location Modal -->
+    <div class="modal fade" id="addLocationModal" tabindex="-1" aria-labelledby="addLocationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addLocationModalLabel">Add New Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addLocationForm">
+                        <div class="mb-3">
+                            <label for="locationName" class="form-label">Location Name *</label>
+                            <input type="text" class="form-control" id="locationName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="locationUrl" class="form-label">Google Maps URL *</label>
+                            <input type="url" class="form-control" id="locationUrl" required 
+                                   placeholder="https://maps.google.com/...">
+                            <div class="form-text">Paste the Google Maps link for this location</div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add Location</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Location Modal -->
+    <div class="modal fade" id="editLocationModal" tabindex="-1" aria-labelledby="editLocationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editLocationModalLabel">Edit Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editLocationForm">
+                        <input type="hidden" id="editLocationId">
+                        <div class="mb-3">
+                            <label for="editLocationName" class="form-label">Location Name *</label>
+                            <input type="text" class="form-control" id="editLocationName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLocationUrl" class="form-label">Google Maps URL *</label>
+                            <input type="url" class="form-control" id="editLocationUrl" required>
+                            <div class="form-text">Paste the Google Maps link for this location</div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Update Location</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+      <script src="toaster.js"></script>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:8000/api';
+        const WASH_POINTS_ENDPOINT = `${API_BASE_URL}/washing-point`;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load wash points from server
+            loadWashPoints();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        // Load wash points from server
+        function loadWashPoints() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const locationsGrid = document.getElementById('locationsGrid');
+            const noLocations = document.getElementById('noLocations');
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'flex';
+            locationsGrid.style.display = 'none';
+            noLocations.style.display = 'none';
+            
+            // Fetch wash points from server
+            fetch(WASH_POINTS_ENDPOINT)
+                .then(response => {
+                    if (!response.ok) {
+                        createToast('Network response was not ok','error');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length === 0) {
+                        showNoLocations();
+                    } else {
+                        renderLocations(data);
+                        updateStats(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching wash points:', error);
+                    createToast('Failed to load wash points', 'error');
+                    showNoLocations();
+                })
+                .finally(() => {
+                    loadingSpinner.style.display = 'none';
+                    locationsGrid.style.display = 'block';
+                });
+        }
+
+        // Show no locations state
+        function showNoLocations() {
+            const locationsGrid = document.getElementById('locationsGrid');
+            const noLocations = document.getElementById('noLocations');
+            
+            locationsGrid.innerHTML = '';
+            noLocations.style.display = 'block';
+            
+            // Update stats to show zeros
+            document.getElementById('totalLocations').textContent = '0';
+            document.getElementById('activeLocations').textContent = '0';
+        }
+
+        // Render locations
+        function renderLocations(locations) {
+            const locationsGrid = document.getElementById('locationsGrid');
+            const noLocations = document.getElementById('noLocations');
+            
+            if (locations.length === 0) {
+                showNoLocations();
+                return;
+            }
+            
+            noLocations.style.display = 'none';
+            locationsGrid.innerHTML = '';
+            
+            locations.forEach(location => {
+                const locationCard = document.createElement('div');
+                locationCard.className = 'col-md-6 col-lg-4 mb-4';
+                locationCard.innerHTML = `
+                    <div class="location-card">
+                        <div class="location-card-header">
+                            <h5 class="location-card-title">${location.location_name}</h5>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                        <div class="location-card-body">
+                            <div class="location-url">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <a href="${location.location_url}" target="_blank">View on Map</a>
+                            </div>
+                            <div class="location-actions">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editLocation(${location.id}, '${location.location_name}', '${location.location_url}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteLocation(${location.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                locationsGrid.appendChild(locationCard);
+            });
+        }
+
+        // Update statistics
+        function updateStats(locations) {
+            document.getElementById('totalLocations').textContent = locations.length;
+            // Assuming all locations are active since the API doesn't provide status
+            document.getElementById('activeLocations').textContent = locations.length;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchLocations').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                // In a real app, you would filter the locations array here
+                console.log('Searching for:', searchTerm);
+            });
+            
+            // Form submissions
+            document.getElementById('addLocationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const locationName = document.getElementById('locationName').value;
+                const locationUrl = document.getElementById('locationUrl').value;
+                
+                // Create new location object
+                const newLocation = {
+                    location_name: locationName,
+                    location_url: locationUrl
+                };
+                
+                // Send POST request to server
+              fetch(`${WASH_POINTS_ENDPOINT}/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newLocation)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                         createToast('Failed to add location', 'error');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                     createToast('Location added successfully!', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('addLocationModal')).hide();
+                    document.getElementById('addLocationForm').reset();
+                    loadWashPoints(); // Refresh the list
+                })
+                .catch(error => {
+                    console.error('Error adding location:', error);
+                    createToast('Failed to add location', 'error');
+                });
+            });
+            
+            document.getElementById('editLocationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const locationId = document.getElementById('editLocationId').value;
+                const locationName = document.getElementById('editLocationName').value;
+                const locationUrl = document.getElementById('editLocationUrl').value;
+                
+                // Create updated location object
+                const updatedLocation = {
+                    location_name: locationName,
+                    location_url: locationUrl
+                };
+                
+                // Send PUT request to server
+                fetch(`${WASH_POINTS_ENDPOINT}/${locationId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedLocation)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update location');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                     createToast('Location updated successfully!', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('editLocationModal')).hide();
+                    loadWashPoints(); // Refresh the list
+                })
+                .catch(error => {
+                    console.error('Error updating location:', error);
+                     createToast('Failed to update location', 'error');
+                });
+            });
+        }
+
+        // Edit location
+        function editLocation(id, name, url) {
+            document.getElementById('editLocationId').value = id;
+            document.getElementById('editLocationName').value = name;
+            document.getElementById('editLocationUrl').value = url;
+            
+            new bootstrap.Modal(document.getElementById('editLocationModal')).show();
+        }
+
+        // Delete location
+        function deleteLocation(id) {
+            if (confirm('Are you sure you want to delete this location?')) {
+                fetch(`${WASH_POINTS_ENDPOINT}/delete/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete location');
+                    }
+                    createToast('Location deleted successfully!', 'success');
+                    loadWashPoints(); // Refresh the list
+                })
+                .catch(error => {
+                    console.error('Error deleting location:', error);
+                     createToast('Failed to delete location', 'error');
+                });
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast show align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+            toast.role = 'alert';
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+            
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Auto-remove toast after 5 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+    </script>
+    <script src="../logout.js"></script>
+    <script src="location.js"></script>
+    <script src="accounts.js"></script>
+</body>
+</html>

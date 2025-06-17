@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoShine - Car Detail Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+
+        :root {
+    --primary: #1a3a5f;
+    --primary-light: #2c5282;
+    --secondary: #ff6b35;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+    --white: #ffffff;
+    --danger: #dc3545;
+    --success: #28a745;
+    --warning: #ffc107;
+    --info: #17a2b8;
+   --dark-gray: #343a40;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--dark-gray);
+    background-color: var(--light-gray);
+    padding-top: 70px;
+}
+
+.navbar {
+    background-color: var(--primary);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand i {
+    margin-right: 10px;
+    color: var(--secondary);
+}
+
+.nav-link {
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    margin: 0 5px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.nav-link i {
+    margin-right: 6px;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dropdown-item {
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.btn-secondary {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.btn-secondary:hover {
+    background-color: #e05a2b;
+    border-color: #e05a2b;
+}
+
+.content-container {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.user-profile img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-profile .user-info {
+    margin-left: 15px;
+}
+
+.user-profile .user-info h6 {
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.user-profile .user-info p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.service-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-left: 4px solid var(--secondary);
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.service-card .service-type {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.service-card .service-time {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.service-card .service-status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.service-card .service-status.completed {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--success);
+}
+
+.service-card .service-status.in-progress {
+    background-color: rgba(23, 162, 184, 0.1);
+    color: var(--info);
+}
+
+.service-card .service-status.pending {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: var(--warning);
+}
+
+.service-card .service-status.cancelled {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--danger);
+}
+
+.card-header-tabs .nav-link {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.card-header-tabs .nav-link.active {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+}
+
+.stats-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+    text-align: center;
+    border-top: 4px solid var(--primary);
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+}
+
+.stats-card .icon {
+    font-size: 2rem;
+    color: var(--secondary);
+    margin-bottom: 10px;
+}
+
+.stats-card .number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 10px 0;
+}
+
+.stats-card .label {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.service-detail-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-detail-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.service-header {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    align-items: center;
+}
+
+.car-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.car-model {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.service-details {
+    padding: 15px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.detail-value {
+    color: #333;
+}
+
+.fa-star {
+    color: var(--warning);
+}
+
+.fa-car {
+    color: var(--primary);
+}
+
+.fa-sparkles {
+    color: var(--secondary);
+}
+
+.fa-clock {
+    color: var(--info);
+}
+
+.fa-money-bill-wave {
+    color: var(--success);
+}
+
+@media (max-width: 991.98px) {
+    .content-container {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .stats-card {
+        margin-bottom: 15px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    body {
+        padding-top: 60px;
+    }
+    }
+
+
+
+
+        /* Previous CSS remains the same, just adding new styles for user profile */
+        
+        /* User Profile in Navbar */
+        .navbar .user-profile-dropdown {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        
+        .navbar .user-profile-dropdown:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .navbar .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 8px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .navbar .user-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        
+        .navbar .user-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: white;
+        }
+        
+        .navbar .user-email {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* Dropdown menu adjustments */
+        .dropdown-menu {
+            min-width: 220px;
+        }
+        
+
+
+
+
+
+
+
+        .form-check {
+    display: flex;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 50px;
+    background-color: #f8f9fa;
+}
+
+.form-check.justify-content-start {
+    justify-content: flex-start;
+    background-color: #ffe8e8; /* Light red when not available */
+}
+
+.form-check.justify-content-end {
+    justify-content: flex-end;
+    background-color: #e8ffe8; /* Light green when available */
+}
+
+/* Optional: Add transition for smooth movement */
+.form-check-label {
+    transition: all 0.3s ease;
+    margin: 0 10px;
+}
+
+
+
+
+
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 400px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+.toast-error {
+    background-color: var(--danger);
+    color: white;
+    padding: 12px 15px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toast-success {
+    background-color: white;
+    color: var(--success);
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--success);
+}
+
+.toast-success strong {
+    color: var(--success);
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.toast-message {
+    flex-grow: 1;
+    color: var(--success);
+}
+
+.toast-body {
+    background-color: white;
+    padding: 12px 15px;
+    color: var(--dark-gray);
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+
+
+
+
+
+
+
+       
+    </style>
+</head>
+<body>
+    <div class="toast-container"></div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-car"></i> AutoClean
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#schedule">
+                            <i class="fas fa-calendar-alt"></i> Schedule
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="accounts.html">
+                            <i class="fas fa-sparkles"></i> Accounts Center
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle user-profile-dropdown" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <img src="" class="user-avatar userProfile" id="userAvatar" alt="User Profile">
+                            <div class="user-info d-none d-md-block">
+                                <span class="user-name userName" id="userName">Loading...</span>
+                                <span class="user-email userEmail" id="userEmail">Loading...</span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <div class="d-flex align-items-center px-3 py-2">
+                                    <img src="" class="user-avatar me-2 userProfile" id="dropdownUserAvatar" alt="User Profile">
+                                    <div>
+                                        <h6 class="mb-0 userName" id="dropdownUserName">Loading...</h6>
+                                        <small class="text-muted userEmail" id="dropdownUserEmail">Loading...</small>
+                                    </div>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="accounts.html"><i class="fas fa-user me-2"></i> My Profile</a></li>
+                            <li><a class="dropdown-item" href="accounts.html"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" onclick="logout()" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-12">
+                <div class="content-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4><i class="fas fa-tachometer-alt me-2"></i> Washer Dashboard</h4>
+                        <div class="d-flex align-items-center">
+                            <div class="form-check form-switch me-3">
+                                <input class="form-check-input" type="checkbox" id="availabilityToggle" checked>
+                                <label class="form-check-label" for="availabilityToggle">Available for Services</label>
+                            </div>
+                            <button class="btn btn-outline-primary" id="refreshButton">
+                                <i class="fas fa-sync-alt me-2"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="stats-card">
+                                <div class="icon"><i class="fas fa-clock"></i></div>
+                                <div class="number" id="todayServices">0</div>
+                                <div class="label">Today's Cars</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="stats-card">
+                                <div class="icon"><i class="fas fa-car"></i></div>
+                                <div class="number" id="weeklyCars">0</div>
+                                <div class="label">This Week's Cars</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="stats-card">
+                                <div class="icon"><i class="fas fa-star"></i></div>
+                                <div class="number" id="averageRating">0</div>
+                                <div class="label">Average Rating</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <div class="stats-card">
+                                <div class="icon"><i class="fas fa-party-horn"></i></div>
+                                <div class="number" id="completedServices">0</div>
+                                <div class="label">Services Completed</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row" id="schedule">
+                        <!-- Today's Services -->
+                        <div class="col-lg-8 mb-4">
+                            <div class="content-container">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5><i class="fas fa-list me-2"></i> Today's Services</h5>
+                                    <div class="form-group mb-0">
+                                        <select class="form-select form-select-sm" id="daySelector">
+                                            <option value="today" selected>Today</option>
+                                            <option value="tomorrow">Tomorrow</option>
+                                            <option value="next7days">Next 7 Days</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="card-body" id="servicesContainer">
+                                    <!-- Services will be loaded dynamically -->
+                                    <div class="text-center py-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Loading services...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Account Summary -->
+                        <div class="col-lg-4">
+                            <div class="content-container text-center">
+                                <h5><i class="fas fa-wallet me-2"></i> Earnings</h5>
+                                <p class="display-6 text-primary" id="washerBalance">Ksh 0</p>
+                                <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#withdrawModal">
+                                    <i class="fas fa-money-bill-wave me-1"></i> Withdraw
+                                </button>
+                                <div class="mt-3">
+                                    <small class="text-muted">Next payout: <span id="nextPayoutDate">Friday</span></small>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Actions ->
+                            <div class="content-container mt-4">
+                                <h5><i class="fas fa-bolt me-2"></i> Quick Actions</h5>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-primary text-start">
+                                        <i class="fas fa-plus-circle me-2"></i> Add Service Slot
+                                    </button>
+                                    <button class="btn btn-outline-secondary text-start">
+                                        <i class="fas fa-clock me-2"></i> Update Availability
+                                    </button>
+                                    <button class="btn btn-outline-success text-start">
+                                        <i class="fas fa-star me-2"></i> View Ratings
+                                    </button>
+                                </div>
+                            </div-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="withdrawModalLabel"><i class="fas fa-money-bill-wave me-2"></i> Withdraw Earnings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="withdrawForm">
+                        <div class="mb-3">
+                            <label for="withdrawAmount" class="form-label">Amount to withdraw (Ksh)</label>
+                            <input type="number" class="form-control" id="withdrawAmount" min="1" max="3500" required>
+                            <div class="form-text">Available balance: <span id="availableBalance">Ksh 0</span></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="withdrawMethod" class="form-label">Withdrawal Method</label>
+                            <select class="form-select" id="withdrawMethod" required>
+                                <option value="">Select a method</option>
+                                <option value="mpesa">Mpesa</option>
+                                <option value="airtelMoney">Airtel Money</option>
+                                <option value="bank">Bank Transfer</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i> Withdrawals are processed within 24 hours.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submitWithdraw">Request Withdrawal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script src="accounts.js"></script>
+    <script src="../logout.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

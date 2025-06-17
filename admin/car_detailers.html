@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Management - GroomStyle</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --primary-light: #2c5282;
+            --secondary: #ff6b35;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            height: 100vh;
+            width: 250px;
+            background-color: var(--primary);
+            color: var(--white);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem 1.5rem;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .sidebar-brand span {
+            color: var(--secondary);
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu a {
+            padding: 0.8rem 1.5rem;
+            color: var(--white);
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: var(--secondary);
+            color: var(--white);
+            border-left: 4px solid var(--white);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-header {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        /* User Profile in Sidebar */
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .user-profile img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        
+        .user-profile h6 {
+            color: var(--white);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+        
+        .user-profile p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+        
+        /* Content Styling */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Stats Cards */
+        .stats-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: rgba(63, 81, 181, 0.15);
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .search-bar .form-control {
+            border-radius: 20px;
+            padding-left: 40px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        /* Status Filter */
+        .status-filter .btn {
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Barber Cards */
+        .barber-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .barber-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .barber-card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        
+        .barber-card-body {
+            padding: 1.5rem;
+        }
+        
+        .barber-card-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .barber-card-email {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .badge-active {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-suspended {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .badge-new {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .badge-offline {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: var(--dark-gray);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                transform: translateX(0);
+            }
+            
+            .sidebar.expanded {
+                width: 250px;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-brand span,
+            .sidebar:not(.expanded) .menu-header,
+            .sidebar:not(.expanded) .sidebar-menu a span,
+            .sidebar:not(.expanded) .user-profile h6,
+            .sidebar:not(.expanded) .user-profile p {
+                display: none;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-menu a {
+                text-align: center;
+                padding: 0.8rem;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.25rem;
+            }
+            
+            .sidebar:not(.expanded) .user-profile {
+                padding: 1rem 0;
+                text-align: center;
+            }
+            
+            .sidebar:not(.expanded) .user-profile img {
+                margin: 0 auto 0.5rem;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .main-content.expanded {
+                margin-left: 250px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .sidebar {
+                width: 0;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.expanded {
+                width: 250px;
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .main-content.expanded {
+                margin-left: 0;
+            }
+        }
+
+        
+
+        /* Add these styles to your existing CSS */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* Hide overflow from the entire sidebar */
+}
+
+.sidebar-header {
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.user-profile {
+    flex-shrink: 0; /* Prevent user profile from shrinking */
+}
+
+.sidebar-menu {
+    flex-grow: 1; /* Allow menu to grow and fill available space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: thin; /* For Firefox */
+}
+
+/* Custom scrollbar styling (optional) */
+.sidebar-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+
+ /* Modal Styles */
+        .modal-header {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: var(--primary-light) !important;
+            border-color: var(--primary-light) !important;
+        }
+  /* Toast Notifications */
+        :root{
+             --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --dark-gray: #343a40;
+        }
+
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 400px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+.toast-error {
+    background-color: var(--danger);
+    color: white;
+    padding: 12px 15px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toast-success {
+    background-color: white;
+    color: var(--success);
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--success);
+}
+
+.toast-success strong {
+    color: var(--success);
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.toast-message {
+    flex-grow: 1;
+    color: var(--success);
+}
+
+.toast-body {
+    background-color: white;
+    padding: 12px 15px;
+    color: var(--dark-gray);
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+    </style>
+
+
+
+    
+</body>
+<div class="toast-container"></div>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">Auto<span>Clean</span></a>
+        </div>
+        
+        <div class="user-profile">
+            <img id="userProfile" class="userProfile" src="" alt="">
+            <h6 id="name" class="userName">Loading...</h6>
+            <p id="userEmail" class="userEmail">Loading...</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <p class="menu-header">Main</p>
+            <a href="index.html"  id="dashboard-link">
+    <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+</a>
+<a href="packages.html"  id="packages-link">
+    <i class="fas fa-box-open"></i> <span>Packages</span>
+</a>
+<a href="location.html"  id="washpoints-link">
+    <i class="fas fa-map-marker-alt"></i> <span>Wash Points</span>
+</a>
+<a href="car_detailers.html" class="active" id="vehicles-link">
+    <i class="fas fa-car"></i> <span>Car Detailers</span>
+</a>
+<a href="clients.html"  id="clients-link">
+    <i class="fas fa-users"></i> <span>Clients</span>
+</a>
+<a href="feedback.html" id="feedback-link">
+    <i class="fas fa-comments"></i> <span>Feedback</span>
+</a>
+<a href="report.html" id="report-link">
+    <i class="fas fa-chart-bar"></i> <span>Report</span>
+</a>
+<a href="#" id="logout-link" onclick="logout()">
+    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="container-fluid">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-cut me-2"></i> Car Detailers Management
+                </h1>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBarberModal">
+                    <i class="fas fa-plus me-2"></i> Add New Barber
+                </button>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-value">0</div>
+                                <p class="stat-label">Total Washers</p>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-value">0</div>
+                                <p class="stat-label">Active Washers</p>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-value">0</div>
+                                <p class="stat-label">Suspended</p>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="fas fa-user-slash"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-value">0</div>
+                                <p class="stat-label">Offline</p>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="fas fa-user-lock"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search and Filter -->
+            <div class="search-bar">
+                <div class="row">
+                    <div class="col-md-8 mb-3 mb-md-0">
+                        <div class="position-relative">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="form-control" placeholder="Search Washers by name, specialty, or ID...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="statusFilter">Status</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="all">All Barbers</option>
+                                <option value="active">Active</option>
+                                <option value="suspended">Suspended</option>
+                                <option value="new">New Hires</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-filter mt-3">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-primary active">All (0)</button>
+                        <button type="button" class="btn btn-outline-primary">Active (0)</button>
+                        <button type="button" class="btn btn-outline-primary">Suspended (0)</button>
+                        <button type="button" class="btn btn-outline-primary">New Hires (0)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barbers List -->
+            <div class="row" id="barbersContainer">
+                <!-- Barber cards will be dynamically added here ->
+                <div class="col-md-4 mb-4">
+                    <div class="barber-card">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Barber" class="barber-card-img">
+                        <div class="barber-card-body">
+                            <h5 class="barber-card-name">John Barber</h5>
+                            <p class="barber-card-email">john.barber@example.com</p>
+                            <span class="badge badge-active mb-3">Active</span>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                <button class="btn btn-sm btn-outline-danger">Suspend</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="barber-card">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Barber" class="barber-card-img">
+                        <div class="barber-card-body">
+                            <h5 class="barber-card-name">Jane Stylist</h5>
+                            <p class="barber-card-email">jane.stylist@example.com</p>
+                            <span class="badge badge-suspended mb-3">Suspended</span>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                <button class="btn btn-sm btn-outline-success">Activate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="barber-card">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Barber" class="barber-card-img">
+                        <div class="barber-card-body">
+                            <h5 class="barber-card-name">Robert Trimmer</h5>
+                            <p class="barber-card-email">robert.t@example.com</p>
+                            <span class="badge badge-offline mb-3">Offline</span>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                <button class="btn btn-sm btn-outline-danger">Suspend</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div-->
+
+    <!-- Add Barber Modal ->
+    <div class="modal fade" id="addBarberModal" tabindex="-1" aria-labelledby="addBarberModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBarberModalLabel">Add New Washer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                   
+                </div>
+                <div class="modal-body">
+                    <form id="addBarberForm">
+                        <div class="mb-3">
+                            <label for="barberName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="barberName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="barberEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="barberEmail" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add Washer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div-->
+
+
+
+    <div class="modal fade" id="addBarberModal" tabindex="-1" aria-labelledby="addBarberModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBarberModalLabel">Add New Washer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addBarberForm">
+                    <div class="mb-3">
+                        <label for="barberName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="barberName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="barberEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="barberEmail" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Add Washer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Edit Barber Modal -->
+    <div id="editBarberModal" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Barber Shift</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editBarberForm">
+                        <div class="mb-3">
+                            <label class="form-label">Barber Name</label>
+                            <p id="editBarberName" class="form-control-static fw-bold"></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" id="saveBarberChanges" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Scripts should be in this order -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="toaster.js"></script>
+    <script src="car_detailer.js"></script>
+    <script src="../logout.js"></script>
+    <script src="accounts.js"></script>
+    
+    <script>
+/*
+
+// Initialize the modal properly
+document.addEventListener('DOMContentLoaded', function() {
+    // Your existing sidebar code...
+    
+    // Proper modal handling
+    const addBarberModal = new bootstrap.Modal(document.getElementById('addBarberModal'));
+    
+    // Form submission handler
+    document.getElementById("addBarberForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById("barberEmail").value;
+        const name = document.getElementById("barberName").value;
+        
+        try {
+            const response = await fetch('http://localhost:8000/api/washer/create', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({name, email})
+            });
+            
+            const data = await response.json();
+
+            if (data.success) {
+                createToast(data.message || "Washer added successfully", 'success');
+                document.getElementById("barberEmail").value = '';
+                document.getElementById("barberName").value = '';
+                addBarberModal.hide(); // Close modal after success
+                fetchBarbers(); // Refresh the list
+            } else {
+                createToast(data.message || 'Failed to add barber', 'error');
+            }
+        } catch (error) {
+            createToast(error.message || "An error occurred", "error");
+        }
+    });
+    
+    // Rest of your initialization code...
+});
+
+
+
+
+*/
+
+
+        
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            // Check screen size on load
+            checkScreenSize();
+            
+            // Add event listener for window resize
+            window.addEventListener('resize', checkScreenSize);
+            
+            function checkScreenSize() {
+                if (window.innerWidth <= 991.98) {
+                    // Medium screens - collapsed sidebar
+                    sidebar.classList.remove('expanded');
+                    mainContent.classList.remove('expanded');
+                } else {
+                    // Large screens - expanded sidebar
+                    sidebar.classList.add('expanded');
+                    mainContent.classList.add('expanded');
+                }
+                
+                if (window.innerWidth <= 767.98) {
+                    // Mobile - hidden sidebar
+                    sidebar.style.width = '0';
+                    sidebar.style.transform = 'translateX(-100%)';
+                } else {
+                    // Tablet/Desktop - visible sidebar
+                    sidebar.style.width = '';
+                    sidebar.style.transform = '';
+                }
+            }
+            
+            // Simulate loading user data
+            setTimeout(() => {
+                document.getElementById('name').textContent = 'Admin User';
+                document.getElementById('userEmail').textContent = 'admin@groomstyle.com';
+            }, 500);
+        });
+    </script>
+</body>
+
+
+</html>

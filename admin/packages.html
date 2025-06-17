@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveMate - Packages</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --primary-light: #2c5282;
+            --secondary: #ff6b35;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            height: 100vh;
+            width: 250px;
+            background-color: var(--primary);
+            color: var(--white);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem 1.5rem;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .sidebar-brand span {
+            color: var(--secondary);
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        
+        .sidebar-menu a {
+            padding: 0.8rem 1.5rem;
+            color: var(--white);
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: var(--secondary);
+            color: var(--white);
+            border-left: 4px solid var(--white);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-header {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Topbar */
+        .topbar {
+            background-color: var(--white);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--dark-gray);
+            cursor: pointer;
+            display: none;
+        }
+        
+        .search-bar {
+            margin-left: 20px;
+            flex-grow: 1;
+        }
+        
+        .search-bar input {
+            border-radius: 20px;
+            border: 1px solid #e2e2e2;
+            padding: 0.4rem 1rem;
+            width: 300px;
+            background-color: #f5f5f5;
+        }
+        
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification-btn {
+            position: relative;
+            margin-right: 1rem;
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 1.1rem;
+        }
+        
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-dropdown {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-dropdown img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        /* Package Cards */
+        .package-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            height: 100%;
+        }
+        
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .package-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .package-body {
+            padding: 1.5rem;
+        }
+
+        .package-card button{
+            background-color: var(--primary-light);
+        }
+        .package-card button:hover{
+            background-color: var(--primary);
+        }
+        
+        .package-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .package-subtitle {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .package-features {
+            margin-bottom: 1rem;
+        }
+        
+        .package-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .package-feature i {
+            color: var(--secondary);
+            margin-right: 0.5rem;
+        }
+        
+        .package-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .package-price span {
+            font-size: 1rem;
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                transform: translateX(0);
+            }
+            
+            .sidebar.expanded {
+                width: 250px;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-brand span,
+            .sidebar:not(.expanded) .menu-header,
+            .sidebar:not(.expanded) .sidebar-menu a span {
+                display: none;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-menu a {
+                text-align: center;
+                padding: 0.8rem;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.25rem;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .main-content.expanded {
+                margin-left: 250px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .sidebar {
+                width: 250px;
+                transform: translateX(-100%);
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .sidebar.expanded {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .main-content.expanded {
+                margin-left: 0;
+            }
+            
+            .search-bar input {
+                width: 100%;
+            }
+            
+            .toggle-sidebar {
+                display: block;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .sidebar-header {
+                padding: 1rem;
+            }
+            
+            .package-card {
+                margin-bottom: 15px;
+            }
+        }
+
+        /* Modal Styles */
+        .modal-header {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: var(--primary-light) !important;
+            border-color: var(--primary-light) !important;
+        }
+
+
+ /* Toast Notifications */
+        :root{
+             --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --dark-gray: #343a40;
+        }
+
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 400px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+.toast-error {
+    background-color: var(--danger);
+    color: white;
+    padding: 12px 15px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toast-success {
+    background-color: white;
+    color: var(--success);
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--success);
+}
+
+.toast-success strong {
+    color: var(--success);
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.toast-message {
+    flex-grow: 1;
+    color: var(--success);
+}
+
+.toast-body {
+    background-color: white;
+    padding: 12px 15px;
+    color: var(--dark-gray);
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+    </style>
+
+
+
+    
+</body>
+<div class="toast-container"></div>
+
+
+    <!-- Sidebar Overlay (for mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">Auto<span>Clean</span></a>
+            <button class="mobile-menu-toggle" id="mobile-menu-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-menu">
+            <p class="menu-header">Main</p>
+             <a href="index.html"  id="dashboard-link">
+    <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+</a>
+<a href="packages.html" class="active" id="packages-link">
+    <i class="fas fa-box-open"></i> <span>Packages</span>
+</a>
+<a href="location.html"  id="washpoints-link">
+    <i class="fas fa-map-marker-alt"></i> <span>Wash Points</span>
+</a>
+<a href="car_detailers.html" id="vehicles-link">
+    <i class="fas fa-car"></i> <span>Car Detailers</span>
+</a>
+<a href="clients.html"  id="clients-link">
+    <i class="fas fa-users"></i> <span>Clients</span>
+</a>
+<a href="feedback.html" id="feedback-link">
+    <i class="fas fa-comments"></i> <span>Feedback</span>
+</a>
+<a href="report.html" id="report-link">
+    <i class="fas fa-chart-bar"></i> <span>Report</span>
+</a>
+<a href="#" id="logout-link" onclick="logout()">
+    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+</a>
+        </div>
+    </div>
+    
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Topbar -->
+        <div class="topbar">
+            <button class="toggle-sidebar" id="toggle-sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="search-bar">
+                <input type="text" placeholder="Search packages..." class="form-control">
+            </div>
+            <div class="topbar-actions ms-auto">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">5</span>
+                </button>
+                <div class="dropdown">
+                    <div class="user-dropdown" data-bs-toggle="dropdown">
+                        <img  src="" class="userProfile" alt="User">
+                        <div>
+                            <h6 class="mb-0 userName">Loading...</h6>
+                            <small class="userEmail">Loading...</small>
+                        </div>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="accounts.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="accounts.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Packages Section -->
+        <section class="mt-5" id="packages">
+            <div class="row" id="packagesContainer">
+                <!-- Basic Wash Package -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="package-card">
+                        <div class="package-img">
+                            <i class="fas fa-spray-can"></i>
+                        </div>
+                        <div class="package-body">
+                            <h3 class="package-title">Basic Wash</h3>
+                            <p class="package-subtitle">Exterior Only</p>
+                            <div class="package-features">
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Exterior Wash</span>
+                                </div>
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Tire Cleaning</span>
+                                </div>
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Basic Dry</span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="package-price" id="basic-price">
+                                    Loading...
+                                </div>
+                                <button class="btn btn-primary update-price-btn" 
+                                        data-package-id="1"
+                                        data-package-name="Basic Wash">
+                                    Update Price
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Standard Wash Package -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="package-card">
+                        <div class="package-img">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="package-body">
+                            <h3 class="package-title">Standard Wash</h3>
+                            <p class="package-subtitle">Interior & Exterior</p>
+                            <div class="package-features">
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Full Exterior Wash</span>
+                                </div>
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Interior Vacuuming</span>
+                                </div>
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Dashboard Cleaning</span>
+                                </div>
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Window Cleaning</span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="package-price" id="standard-price">
+                                    Loading...
+                                </div>
+                                <button class="btn btn-primary update-price-btn" 
+                                        data-package-id="2"
+                                        data-package-name="Standard Wash">
+                                    Update Price
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Wash Package -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="package-card">
+                        <div class="package-img">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="package-body">
+                            <h3 class="package-title">Premium Wash</h3>
+                            <p class="package-subtitle">Complete Detailing</p>
+                            <div class="package-features">
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Full Interior/Exterior</span>
+                                </div>
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Wax & Polish</span>
+                                </div>
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Leather Treatment</span>
+                                </div>
+                                <div class="package-feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Air Freshener</span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="package-price" id="premium-price">
+                                    Loading...
+                                </div>
+                                <button class="btn btn-primary update-price-btn" 
+                                        data-package-id="3"
+                                        data-package-name="Premium Wash">
+                                    Update Price
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Price Update Modal -->
+    <div class="modal fade" id="priceUpdateModal" tabindex="-1" aria-labelledby="priceUpdateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="priceUpdateModalLabel">Update Package Price</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="priceUpdateForm">
+                        <input type="hidden" id="packageId">
+                        <div class="mb-3">
+                            <label for="packageName" class="form-label">Package Name</label>
+                            <input type="text" class="form-control" id="packageName" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPrice" class="form-label">New Price (Ksh)</label>
+                            <input type="number" step="0.01" class="form-control" id="newPrice" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Update Price</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="toaster.js"></script>
+    
+    <script>
+        // DOM Elements
+        const toggleSidebar = document.getElementById('toggle-sidebar');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const priceUpdateModal = new bootstrap.Modal(document.getElementById('priceUpdateModal'));
+        const priceUpdateForm = document.getElementById('priceUpdateForm');
+        
+        // Package IDs
+        const PACKAGE_IDS = {
+            BASIC: 1,
+            STANDARD: 2,
+            PREMIUM: 3
+        };
+        
+        // API Endpoints
+        const API = {
+            GET_PRICES: 'http://localhost:8000/api/prices/fetch',
+            UPDATE_PRICE: 'http://localhost:8000/api/update-price'
+        };
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupSidebar();
+            setupEventListeners();
+            fetchPackagePrices();
+        });
+        
+        // Setup sidebar functionality
+        function setupSidebar() {
+            // Check screen size on load
+            checkScreenSize();
+            
+            // Add event listener for window resize
+            window.addEventListener('resize', checkScreenSize);
+            
+            function checkScreenSize() {
+                if (window.innerWidth <= 767.98) {
+                    // Mobile view
+                    toggleSidebar.style.display = 'block';
+                    sidebar.classList.remove('expanded');
+                    mainContent.classList.remove('expanded');
+                    sidebarOverlay.classList.remove('active');
+                } else if (window.innerWidth <= 991.98) {
+                    // Tablet view - collapsed sidebar by default
+                    toggleSidebar.style.display = 'block';
+                    sidebar.classList.remove('expanded');
+                    mainContent.classList.remove('expanded');
+                } else {
+                    // Desktop view - full sidebar
+                    toggleSidebar.style.display = 'none';
+                    sidebar.classList.add('expanded');
+                    mainContent.classList.add('expanded');
+                }
+            }
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Toggle sidebar for desktop (medium screens)
+            toggleSidebar.addEventListener('click', function() {
+                if (window.innerWidth <= 991.98) {
+                    // For medium screens, toggle expanded class
+                    sidebar.classList.toggle('expanded');
+                    mainContent.classList.toggle('expanded');
+                } else {
+                    // For mobile, show/hide sidebar with overlay
+                    sidebar.classList.toggle('expanded');
+                    sidebarOverlay.classList.toggle('active');
+                }
+            });
+            
+            // Close sidebar on mobile when clicking close button
+            mobileMenuClose.addEventListener('click', function() {
+                sidebar.classList.remove('expanded');
+                sidebarOverlay.classList.remove('active');
+            });
+            
+            // Close sidebar when clicking on overlay
+            sidebarOverlay.addEventListener('click', function() {
+                sidebar.classList.remove('expanded');
+                sidebarOverlay.classList.remove('active');
+            });
+            
+            // Update price button click handlers
+            document.querySelectorAll('.update-price-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const packageId = this.getAttribute('data-package-id');
+                    const packageName = this.getAttribute('data-package-name');
+                    
+                    // Set modal values
+                    document.getElementById('packageId').value = packageId;
+                    document.getElementById('packageName').value = packageName;
+                    
+                    // Get current price to pre-fill the form
+                    let currentPrice = 0;
+                    switch(parseInt(packageId)) {
+                        case PACKAGE_IDS.BASIC:
+                            currentPrice = document.getElementById('basic-price').textContent.replace('Ksh', '').trim();
+                            break;
+                        case PACKAGE_IDS.STANDARD:
+                            currentPrice = document.getElementById('standard-price').textContent.replace('Ksh', '').trim();
+                            break;
+                        case PACKAGE_IDS.PREMIUM:
+                            currentPrice = document.getElementById('premium-price').textContent.replace('Ksh', '').trim();
+                            break;
+                    }
+                    
+                    document.getElementById('newPrice').value = currentPrice;
+                    
+                    // Show modal
+                    priceUpdateModal.show();
+                });
+            });
+            
+            // Price update form submission
+            priceUpdateForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const packageId = document.getElementById('packageId').value;
+                const newPrice = document.getElementById('newPrice').value;
+                
+                if (!newPrice || isNaN(newPrice)) {
+                    createToast('Please enter a valid price', 'error');
+                    return;
+                }
+                
+                updatePackagePrice(packageId, newPrice);
+            });
+        }
+        
+        // Fetch package prices from API
+        function fetchPackagePrices() {
+            fetch(API.GET_PRICES)
+                .then(response => {
+                    if (!response.ok) {
+                         createToast('Network response was not ok!, Failed to load package prices', 'error');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        data.data.forEach(pkg => {
+                            // Map the API package IDs to our static IDs
+                            let displayId;
+                            switch(pkg.id) {
+                                case 1: // Basic Wash
+                                    displayId = PACKAGE_IDS.BASIC;
+                                    break;
+                                case 2: // Full Detail (Standard)
+                                    displayId = PACKAGE_IDS.STANDARD;
+                                    break;
+                                case 3: // Engine Clean (Premium)
+                                    displayId = PACKAGE_IDS.PREMIUM;
+                                    break;
+                                default:
+                                    createToast('Unknown package ID from API:', pkg.id, 'error');
+                                    return;
+                            }
+                            updatePriceDisplay(displayId, parseFloat(pkg.price));
+                        });
+                    } else {
+                        createToast('Failed to fetch package prices', 'error');
+                        // Set default prices if API fails
+                      /*  updatePriceDisplay(PACKAGE_IDS.BASIC, 0.00);
+                        updatePriceDisplay(PACKAGE_IDS.STANDARD, 0.00);
+                        updatePriceDisplay(PACKAGE_IDS.PREMIUM, 0.00);*/
+                    }
+                })
+                .catch(error => {
+                    createToast('Error fetching package prices:', 'error');
+                    // Set default prices if API fails
+                  /*  updatePriceDisplay(PACKAGE_IDS.BASIC, 5.00);
+                    updatePriceDisplay(PACKAGE_IDS.STANDARD, 15.00);
+                    updatePriceDisplay(PACKAGE_IDS.PREMIUM, 10.00);*/
+                });
+        }
+        
+        // Update package price display
+        function updatePriceDisplay(packageId, price) {
+            const formattedPrice = `Ksh ${price.toFixed(2)}`;
+            
+            switch(parseInt(packageId)) {
+                case PACKAGE_IDS.BASIC:
+                    document.getElementById('basic-price').textContent = formattedPrice;
+                    break;
+                case PACKAGE_IDS.STANDARD:
+                    document.getElementById('standard-price').textContent = formattedPrice;
+                    break;
+                case PACKAGE_IDS.PREMIUM:
+                    document.getElementById('premium-price').textContent = formattedPrice;
+                    break;
+                default:
+                    console.error('Unknown package ID:', packageId);
+            }
+        }
+        
+        // Update package price via API
+        function updatePackagePrice(packageId, newPrice) {
+            // Map our static IDs to API package IDs
+            let apiPackageId;
+            switch(parseInt(packageId)) {
+                case PACKAGE_IDS.BASIC:
+                    apiPackageId = 1; // Basic Wash
+                    break;
+                case PACKAGE_IDS.STANDARD:
+                    apiPackageId = 2; // Full Detail (Standard)
+                    break;
+                case PACKAGE_IDS.PREMIUM:
+                    apiPackageId = 3; // Engine Clean (Premium)
+                    break;
+                default:
+                    createToast('Invalid package ID', 'error');
+                    return;
+            }
+            
+            fetch(API.UPDATE_PRICE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    service_id: apiPackageId,
+                    price: parseFloat(newPrice)
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    createToast('Network response was not ok', 'error');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    createToast(data.message, 'success');
+                    updatePriceDisplay(packageId, parseFloat(newPrice));
+                    priceUpdateModal.hide();
+                } else {
+                    createToast('Failed to update price: ' + (data.message || 'Unknown error'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating price:', error);
+                createToast('An error occurred while updating the price', 'error');
+            });
+        }
+     
+    </script>
+    <script src="accounts.js"></script>
+    <script src="../logout.js"></script>
+</body>
+</html>

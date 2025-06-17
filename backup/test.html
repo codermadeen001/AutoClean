@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WashHub - Premium Car Wash Portal</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --primary-light: #2c5282;
+            --secondary: #ff6b35;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+
+             --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --dark-gray: #343a40;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background-color: var(--light-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background-color: var(--primary);
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--white);
+        }
+        
+        .navbar-brand span {
+            color: var(--secondary);
+        }
+        
+        .nav-link {
+            color: var(--white) !important;
+            font-weight: 600;
+            margin: 0 0.5rem;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary) !important;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .userProfile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%; /* Makes the image circular */
+            object-fit: cover;
+            border: 3px solid  var(--secondary);/* #FFA500; /* Orange-ish border */
+            margin-right: 15px; /* Space between image and text */
+            }
+
+
+
+
+        
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        
+        /* Dashboard Cards */
+        .dashboard-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dashboard-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        /* Package Cards */
+        .package-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            height: 100%;
+        }
+        
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .package-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .package-body {
+            padding: 1.5rem;
+        }
+        
+        .package-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .package-subtitle {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .package-features {
+            margin-bottom: 1rem;
+        }
+        
+        .package-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .package-feature i {
+            color: var(--secondary);
+            margin-right: 0.5rem;
+        }
+        
+        .package-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .package-price span {
+            font-size: 1rem;
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        /* Search */
+        .search-wrapper {
+            margin-top: -1rem;
+        }
+
+        .search-wrapper .form-control {
+            border-radius: 30px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .search-wrapper .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(26, 58, 95, 0.25);
+        }
+
+        /* Booking Table */
+        .booking-table th, .booking-table td {
+            vertical-align: middle;
+        }
+
+        .booking-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        .booking-badge.active {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+        }
+
+        .booking-badge.pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .booking-badge.completed {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+
+        .booking-badge.cancelled {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        /* Form controls */
+        .form-control {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(26, 58, 95, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e45a2a;
+            border-color: #e45a2a;
+            transform: translateY(-2px);
+        }
+
+        /* Booking summary */
+        .booking-details-card {
+            background-color: rgba(26, 58, 95, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .booking-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .booking-summary-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Animation */
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Success animation */
+        .success-animation {
+            margin: 20px auto;
+        }
+        
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .checkmark-circle .background {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #00C851;
+            position: absolute;
+        }
+        
+        .checkmark-circle .checkmark {
+            border-radius: 5px;
+        }
+        
+        .checkmark-circle .checkmark.draw:after {
+            animation-delay: 100ms;
+            animation-duration: 1s;
+            animation-timing-function: ease;
+            animation-name: checkmark;
+            transform: scaleX(-1) rotate(135deg);
+            animation-fill-mode: forwards;
+        }
+        
+        .checkmark-circle .checkmark:after {
+            opacity: 0;
+            height: 40px;
+            width: 20px;
+            transform-origin: left top;
+            border-right: 7px solid #00C851;
+            border-top: 7px solid #00C851;
+            border-radius: 2px !important;
+            content: '';
+            left: 24px;
+            top: 44px;
+            position: absolute;
+        }
+
+        @keyframes checkmark {
+            0% {
+                height: 0;
+                width: 0;
+                opacity: 1;
+            }
+            20% {
+                height: 0;
+                width: 20px;
+                opacity: 1;
+            }
+            40% {
+                height: 40px;
+                width: 20px;
+                opacity: 1;
+            }
+            100% {
+                height: 40px;
+                width: 20px;
+                opacity: 1;
+            }
+        }
+
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 991.98px) {
+            .navbar {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .dashboard-card {
+                margin-bottom: 1rem;
+            }
+            
+            .package-features {
+                margin-bottom: 1rem;
+            }
+            
+            .package-feature {
+                margin-bottom: 0.5rem;
+            }
+
+            .user-avatar {
+                width: 35px;
+                height: 35px;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-icon {
+                font-size: 2rem;
+            }
+
+            .package-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            main {
+                padding: 1rem 0;
+            }
+
+            .dashboard-card {
+                padding: 1rem;
+            }
+
+            .package-body {
+                padding: 1rem;
+            }
+
+            .search-wrapper .form-control {
+                width: 100% !important;
+            }
+        }
+
+
+
+
+
+
+
+
+        /* Active Booking Card Styling */
+.dashboard-card {
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-left: 4px solid #1a3a5f; /* Primary color accent */
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Washer Info Section */
+.dashboard-card .col-md-6 {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Washer Name and Image Container */
+.washer-info-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Washer Image Styling */
+.washer-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ff6b35; /* Secondary color border */
+    margin-right: 12px;
+}
+
+/* Washer Name Styling */
+.washer-name {
+    font-weight: 600;
+    color: #1a3a5f; /* Primary color */
+    margin: 0;
+}
+
+/* Status Badge Styling */
+.booking-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.booking-badge.active {
+    background-color: rgba(25, 135, 84, 0.1); /* Green background */
+    color: #198754; /* Green text */
+}
+
+/* Progress Bar Styling */
+.progress {
+    height: 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.progress-bar {
+    background-color: #198754; /* Green progress bar */
+    border-radius: 4px;
+}
+
+/* Action Buttons Styling */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.action-buttons .btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+}
+
+/* Package Icon Styling */
+.package-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a3a5f, #2c5282);
+    border-radius: 10px;
+    color: white;
+    font-size: 1.8rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+    .dashboard-card .row {
+        flex-direction: column;
+    }
+    
+    .washer-info-container {
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .action-buttons {
+        margin-top: 15px;
+    }
+}
+
+
+
+
+
+
+
+    :root {
+      --paypal-blue: #0070ba;
+      --paypal-dark-blue: #003087;
+      --light-gray: #f5f5f5;
+    }
+    
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    .floating-button {
+      position: fixed;
+      top: 70%;
+      left: 20px;
+      z-index: 1000;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--paypal-blue);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .floating-button:hover {
+      background-color: var(--paypal-dark-blue);
+      transform: scale(1.1);
+    }
+    
+    .barber-card {
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    
+    .barber-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .barber-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--paypal-blue);
+    }
+    
+    .rating-stars {
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .rating-stars .fa-star {
+      color: #ccc;
+      transition: color 0.2s ease;
+    }
+    
+    .rating-stars .fa-star.active {
+      color: #FFD700;
+    }
+    
+    .rating-value {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--paypal-dark-blue);
+    }
+    
+    .modal-content {
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    
+    .modal-header {
+      background-color: var(--paypal-blue);
+      color: white;
+    }
+    
+    .btn-primary {
+      background-color: var(--paypal-blue);
+      border-color: var(--paypal-blue);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--paypal-dark-blue);
+      border-color: var(--paypal-dark-blue);
+    }
+
+    /* Star rating styles */
+    .rating-stars {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .rating-stars .fa-star {
+      color: #ccc;
+      transition: color 0.2s ease;
+    }
+
+    /* Hover effect - yellow stars */
+    .rating-stars:hover .fa-star {
+      color: #ccc; /* Reset all stars first */
+    }
+
+    .rating-stars .fa-star.hover,
+    .rating-stars .fa-star.active {
+      color: #FFD700; /* Yellow color for stars on hover and active */
+    }
+
+    .overall-rating {
+      background-color: var(--light-gray);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .overall-rating-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--paypal-dark-blue);
+    }
+    
+    .unrate-button {
+      font-size: 14px;
+      color: #dc3545;
+      cursor: pointer;
+      margin-left: 10px;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+    
+    .unrate-button:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    
+    .rating-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    
+    .rating-header span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .modal-header{
+        background-color:  #303f9f;
+        background-color: rgba(63, 81, 181, 0.1);
+        
+        background-color: var(--paypal-dark-blue) !important;
+        
+    }
+
+    .toast-container {
+    min-width: 250px;
+  }
+  
+  .toast {
+    opacity: 1 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Star rating styling */
+  .rating-stars .fa-star {
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  
+  .rating-stars .fa-star.hover,
+  .rating-stars .fa-star.active {
+    color: #FFD700;
+  }
+  
+  .rating-stars .fa-star.far {
+    color: #ccc;
+  }
+
+
+
+
+
+
+
+
+
+
+        
+    </style>
+</head>
+<body>
+    <div class="toast-container"></div>
+    <!-- Toast container - add this right before the closing body tag -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1060;">
+  </div>
+  
+
+  <!-- Floating Star Button -->
+  <div class="floating-button" id="ratingButton">
+    <i class="fas fa-star fa-lg"></i>
+  </div>
+  
+  <!-- Barber Rating Modal -->
+  <div class="modal fade" id="barberRatingModal" tabindex="-1" aria-labelledby="barberRatingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="barberRatingModalLabel">Rate Your Barber</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row" id="barberList">
+              <!-- Barber cards will be loaded here dynamically -->
+              <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Templates -->
+  <template id="barberCardTemplate">
+    <div class="col-md-6 mb-4">
+      <div class="barber-card p-3 bg-white">
+        <div class="d-flex align-items-center mb-3">
+          <img src="" alt="Barber" class="barber-image me-3">
+          <div>
+            <h5 class="barber-name mb-1"></h5>
+            <p class="text-muted speciality mb-0"></p>
+          </div>
+        </div>
+        <div class="rating-container">
+          <div class="rating-header">
+            <span>Your Rating:</span>
+            <span class="unrate-button" style="display: none;">Remove rating</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="rating-stars">
+              <i class="far fa-star" data-rating="1"></i>
+              <i class="far fa-star" data-rating="2"></i>
+              <i class="far fa-star" data-rating="3"></i>
+              <i class="far fa-star" data-rating="4"></i>
+              <i class="far fa-star" data-rating="5"></i>
+              <i class="far fa-star" data-rating="6"></i>
+              <i class="far fa-star" data-rating="7"></i>
+              <i class="far fa-star" data-rating="8"></i>
+              <i class="far fa-star" data-rating="9"></i>
+              <i class="far fa-star" data-rating="10"></i>
+            </div>
+            <span class="rating-value">0/10</span>
+          </div>
+          <div class="mt-2">
+            <small class="text-muted"><span class="total-ratings">0</span> ratings</small>
+          </div>
+          <div class="overall-rating mt-2">
+            <span>Overall Rating:</span>
+            <span class="overall-rating-value">0/10</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Confirm Unrate Modal -->
+  <div class="modal fade" id="confirmUnrateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Remove Rating</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to remove your rating for this barber?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmUnrateBtn">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="toast-container"></div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Wash<span>Hub</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+               <ul class="navbar-nav me-auto">
+    <li class="nav-item">
+        <a class="nav-link active" href="#dashboard">
+            <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#packages">
+            <i class="fas fa-box-open me-1"></i> Packages
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#bookings">
+            <i class="fas fa-calendar-check me-1"></i> Bookings
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="accounts.html">
+            <i class="fas fa-user-circle me-1"></i> Account Center
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="logout()">
+            <i class="fas fa-sign-out-alt me-1"></i> Logout
+        </a>
+    </li>
+</ul>
+
+
+
+                <div class="d-flex align-items-center">
+                    <div class="position-relative me-3">
+                        <i class="fas fa-bell fs-5 text-white"></i>
+                        <span class="notification-badge">2</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <img src="" class="userProfile" alt="User">
+                        <div class="d-none d-md-block">
+                            <h6 class="mb-0 text-white  userName" id="userName" >Loading...</h6>
+                            <small class="text-white-50 userEmail" id="userName" >Loading...</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Dashboard Section -->
+        <section id="dashboard">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Dashboard</h2>
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-comment-dots me-2"></i>Feedback
+                    </button>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="dashboard-card text-center animate-fade-in">
+                            <i class="fas fa-car-side dashboard-icon"></i>
+                            <h3 id="activeBookingsCount">0</h3>
+                            <p class="mb-0">Active Bookings</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="dashboard-card text-center animate-fade-in" style="animation-delay: 0.1s;">
+                            <i class="fas fa-calendar-check dashboard-icon"></i>
+                            <h3 id="totalBookings">0</h3>
+                            <p class="mb-0">Total Washes</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="dashboard-card text-center animate-fade-in" style="animation-delay: 0.2s;">
+                            <i class="fas fa-money-bill-wave dashboard-icon"></i>
+                            <h3 id="totalSpent">Ksh 0</h3>
+                            <p class="mb-0">Total Spent</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="dashboard-card text-center animate-fade-in" style="animation-delay: 0.3s;">
+                            <i class="fas fa-medal dashboard-icon"></i>
+                            <h3 id="membership">Basic</h3>
+                            <p class="mb-0">Membership Status</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Packages Section -->
+                <section class="mt-5" id="packages">
+                    <div class="text-center mb-5">
+                        <h2>Our Wash Packages</h2>
+                        <p class="mb-0">Choose from our premium car wash services</p>
+                    </div>
+
+                    <div class="search-wrapper text-center mb-4">
+                        <input type="search" class="form-control d-inline-block w-50" placeholder="Search packages..." id="packageSearchInput">
+                    </div>
+                    
+                    <div class="row" id="packagesContainer">
+                        <!-- Basic Wash Package -->
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="package-card">
+                                <div class="package-img">
+                                    <i class="fas fa-spray-can"></i>
+                                </div>
+                                <div class="package-body">
+                                    <h3 class="package-title">Basic Wash</h3>
+                                    <p class="package-subtitle">Exterior Only</p>
+                                    <div class="package-features">
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Exterior Wash</span>
+                                        </div>
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Tire Cleaning</span>
+                                        </div>
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Basic Dry</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="package-price">
+                                            Loading...
+                                        </div>
+                                        <!--button class="btn btn-primary book-now-btn" 
+                                                data-package="Basic Wash" 
+                                                data-price="500" 
+                                                data-duration="30 minutes">
+                                            Book Now
+                                        </button-->
+                                         <button class="btn btn-primary book-now-btn" 
+                                                data-package="Basic Wash" 
+                                                data-package-id="1">
+                                                Book Now
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Standard Wash Package -->
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="package-card">
+                                <div class="package-img">
+                                    <i class="fas fa-car"></i>
+                                </div>
+                                <div class="package-body">
+                                    <h3 class="package-title">Standard Wash</h3>
+                                    <p class="package-subtitle">Interior & Exterior</p>
+                                    <div class="package-features">
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Full Exterior Wash</span>
+                                        </div>
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Interior Vacuuming</span>
+                                        </div>
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Dashboard Cleaning</span>
+                                        </div>
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Window Cleaning</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="package-price">
+                                            Loading...
+                                        </div>
+                                        <!--button class="btn btn-primary book-now-btn" 
+                                                data-package="Standard Wash" 
+                                                data-price="800" 
+                                                data-duration="45 minutes">
+                                            Book Now
+                                        </button-->
+                                         <button class="btn btn-primary book-now-btn" 
+                                                data-package="Basic Wash" 
+                                                data-package-id="2">
+                                                Book Now
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Premium Wash Package -->
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="package-card">
+                                <div class="package-img">
+                                    <i class="fas fa-gem"></i>
+                                </div>
+                                <div class="package-body">
+                                    <h3 class="package-title">Premium Wash</h3>
+                                    <p class="package-subtitle">Complete Detailing</p>
+                                    <div class="package-features">
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Full Interior/Exterior</span>
+                                        </div>
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Wax & Polish</span>
+                                        </div>
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Leather Treatment</span>
+                                        </div>
+                                        <div class="package-feature">
+                                            <i class="fas fa-check"></i>
+                                            <span>Air Freshener</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="package-price">
+                                            Loading...
+                                        </div>
+                                        <!--button class="btn btn-primary book-now-btn" 
+                                                data-package="Premium Wash" 
+                                                data-price="1200" 
+                                                data-duration="60 minutes">
+                                            Book Now
+                                        </button-->
+                                         <button class="btn btn-primary book-now-btn" 
+                                                data-package="Basic Wash" 
+                                                data-package-id="3">
+                                                Book Now
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+
+
+
+
+
+                
+    <section>
+                     <!-- Active Rentals Section (Add this after the dashboard stats) -->
+    <div class="row mt-4" id="activeRentalsSection">
+        <div class="col-12">
+            <h4 class="mb-3">Active Wash Services</h4>
+        </div>
+        
+        <!-- Active Rental Card 1 ->
+        <div class="col-lg-6 col-md-12 mb-3">
+            <div class="dashboard-card">
+                <div class="row align-items-center">
+                </div>
+            </div>
+        </div-->
+    </div>
+    </section>
+
+
+
+                <!-- Bookings Section ->
+<section class="mt-5" id="bookings">
+    <div class="pastbookings">
+    <h3 class="mb-4">Recent Bookings</h3>
+    <div class="dashboard-card">
+        <div class="table-responsive">
+            <table class="table table-hover bookings">
+                <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Date</th>
+                        <th>Washer</th>
+                        <th>Status</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody class="bookings-body" id="bookingsTableBody">
+                    <tr class="empty-state">
+                        <!--td colspan="5" class="text-center py-5">
+                            <div style="font-size: 3rem;">📭</div>
+                            <p class="text-muted">No past bookings found</p>
+                        </td->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</section-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Bookings Section -->
+<section class="mt-5" id="bookings">
+    <div class="pastbookings">
+        <h3 class="mb-4">Recent Bookings</h3>
+        <div class="dashboard-card">
+            <div class="table-responsive">
+                <table class="table table-hover bookings">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th>Date</th>
+                            <th>Washer</th>
+                            <th>Status</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bookings-body" id="bookingsTableBody">
+                        <tr class="empty-state">
+                            <!-- Empty state content can go here if needed -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+    </main>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Book Wash Service</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="mb-3" id="selectedPackageName">Package Name</h4>
+                    
+                    <form id="bookingForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="bookingDate" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="bookingDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="bookingTime" class="form-label">Time</label>
+                                <select class="form-control" id="bookingTime" required>
+                                    <option value="">Select Time</option>
+                                    <option value="08:00">8:00 AM</option>
+                                    <option value="09:00">9:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="13:00">1:00 PM</option>
+                                    <option value="14:00">2:00 PM</option>
+                                    <option value="15:00">3:00 PM</option>
+                                    <option value="16:00">4:00 PM</option>
+                                    <option value="17:00">5:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="selectedWasher" class="form-label">Select Washer</label>
+                            <select class="form-control" id="selectedWasher" required>
+                                <option value="">Choose your washer</option>
+                                <option value="mike-johnson">Mike Johnson - ⭐ 4.9 (Premium Specialist)</option>
+                                <option value="sarah-wilson">Sarah Wilson - ⭐ 4.8 (Detail Expert)</option>
+                                <option value="john-smith">John Smith - ⭐ 4.7 (Quick & Efficient)</option>
+                                <option value="mary-brown">Mary Brown - ⭐ 4.9 (Interior Specialist)</option>
+                                <option value="david-jones">David Jones - ⭐ 4.6 (Exterior Expert)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="selectedLocation" class="form-label">Select Location</label>
+                            <select class="form-control" id="selectedLocation" required>
+                                <option value="">Choose location</option>
+                                <option value="westlands">Westlands Branch - Westlands Mall</option>
+                                <option value="cbd">CBD Branch - City Center</option>
+                                <option value="karen">Karen Branch - Karen Shopping Center</option>
+                                <option value="eastlands">Eastlands Branch - Eastleigh</option>
+                                <option value="mobile">Mobile Service - We come to you (+Ksh 200)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="carDetails" class="form-label">Car Details</label>
+                            <input type="text" class="form-control" id="carDetails" placeholder="e.g., Toyota Camry, Red, KCA 123A" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="specialInstructions" class="form-label">Special Instructions (Optional)</label>
+                            <textarea class="form-control" id="specialInstructions" rows="3" placeholder="Any special requests or notes..."></textarea>
+                        </div>
+                        
+                        <div class="booking-details-card">
+                            <div class="booking-summary-item">
+                                <span>Package:</span>
+                                <span id="summaryPackage">Package Name</span>
+                            </div>
+                            <div class="booking-summary-item">
+                                <span>Duration:</span>
+                                <span id="summaryDuration">45 minutes</span>
+                            </div>
+                            <div class="booking-summary-item">
+                                <span>Date & Time:</span>
+                                <span id="summaryDateTime">--/--/---- --:--</span>
+                            </div>
+                            <div class="booking-summary-item">
+                                <span>Location:</span>
+                                <span id="summaryLocation">Not selected</span>
+                            </div>
+                            <div class="booking-summary-total">
+                                <span>Total Amount:</span>
+                                <span id="summaryTotal">Ksh 0</span>
+                            </div>
+                        </div>
+                        
+                        <!--div class="mt-4">
+                            <h5>Payment Method</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="mpesaPayment" checked>
+                                <label class="form-check-label" for="mpesaPayment">
+                                    Pay with M-Pesa
+                                </label>
+                            </div>
+                        </div-->
+
+
+                        <div class="mt-4">
+                            <h5>Payment Method</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="mpesaPayment" checked>
+                                <label class="form-check-label" for="mpesaPayment">
+                                    Pay with M-Pesa
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment">
+                                <label class="form-check-label" for="cardPayment">
+                                    Pay with Card
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cashPayment">
+                                <label class="form-check-label" for="cashPayment">
+                                    Pay Cash on Service
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmBookingBtn">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Success Modal -->
+    <div class="modal fade" id="bookingSuccessModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="success-animation">
+                        <div class="checkmark-circle">
+                            <div class="background"></div>
+                            <div class="checkmark draw"></div>
+                        </div>
+                    </div>
+                    <h3 class="mt-4 mb-3">Booking Confirmed!</h3>
+                    <p class="mb-4">Your wash service has been successfully booked. You'll receive a confirmation SMS shortly.</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Great!</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="window.print()">Print Receipt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="modal fade" id="feedbackModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-comment-dots me-2"></i>
+                        Share Your Feedback
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="feedbackForm">
+                        <div class="mb-3">
+                            <label for="feedbackType" class="form-label">Feedback Type</label>
+                            <select class="form-control" id="feedbackType" required>
+                                <option value="">Select feedback type</option>
+                                <option value="service-quality">Service Quality</option>
+                                <option value="booking-experience">Booking Experience</option>
+                                <option value="washer-performance">Washer Performance</option>
+                                <option value="app-functionality">App Functionality</option>
+                                <option value="pricing">Pricing</option>
+                                <option value="suggestion">Suggestion</option>
+                                <option value="complaint">Complaint</option>
+                                <option value="compliment">Compliment</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Overall Rating</label>
+                            <div class="d-flex gap-2 mb-2">
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="1">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="2">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="3">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="4">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="5">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">Click to rate (1-5 stars)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="feedbackMessage" class="form-label">Your Feedback</label>
+                            <textarea class="form-control" id="feedbackMessage" rows="5" 
+                                      placeholder="Tell us about your experience..." required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Your Name (Optional)</label>
+                            <input type="text" class="form-control" id="customerName" placeholder="Enter your name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="customerEmail" class="form-label">Email (Optional)</label>
+                            <input type="email" class="form-control" id="customerEmail" placeholder="your.email@example.com">
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="allowContact">
+                            <label class="form-check-label" for="allowContact">
+                                Allow WashHub to contact me regarding this feedback
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submitFeedbackBtn">Submit Feedback</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    </script>
+</body>
+<script src="test.js"></script>
+<script src="accounts.js"></script>
+<script src="../logout.js"></script>
+<script src="chat.js"></script>
+
+
+
+
+
+</html>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Management - GroomStyle</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --primary-light: #2c5282;
+            --secondary: #ff6b35;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            height: 100vh;
+            width: 250px;
+            background-color: var(--primary);
+            color: var(--white);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem 1.5rem;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .sidebar-brand span {
+            color: var(--secondary);
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu a {
+            padding: 0.8rem 1.5rem;
+            color: var(--white);
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: var(--secondary);
+            color: var(--white);
+            border-left: 4px solid var(--white);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-header {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        /* User Profile in Sidebar */
+        .user-profile {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .user-profile img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        
+        .user-profile h6 {
+            color: var(--white);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+        
+        .user-profile p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+        
+        /* Content Styling */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Stats Cards */
+        .stats-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: rgba(63, 81, 181, 0.15);
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .search-bar .form-control {
+            border-radius: 20px;
+            padding-left: 40px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        /* Status Filter */
+        .status-filter .btn {
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* User Cards */
+        .user-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        
+        .user-card-body {
+            padding: 1.5rem;
+        }
+        
+        .user-card-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-card-email {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .badge-active {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-suspended {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .badge-new {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                transform: translateX(0);
+            }
+            
+            .sidebar.expanded {
+                width: 250px;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-brand span,
+            .sidebar:not(.expanded) .menu-header,
+            .sidebar:not(.expanded) .sidebar-menu a span,
+            .sidebar:not(.expanded) .user-profile h6,
+            .sidebar:not(.expanded) .user-profile p {
+                display: none;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-menu a {
+                text-align: center;
+                padding: 0.8rem;
+            }
+            
+            .sidebar:not(.expanded) .sidebar-menu i {
+                margin-right: 0;
+                font-size: 1.25rem;
+            }
+            
+            .sidebar:not(.expanded) .user-profile {
+                padding: 1rem 0;
+                text-align: center;
+            }
+            
+            .sidebar:not(.expanded) .user-profile img {
+                margin: 0 auto 0.5rem;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .main-content.expanded {
+                margin-left: 250px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .sidebar {
+                width: 0;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.expanded {
+                width: 250px;
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .main-content.expanded {
+                margin-left: 0;
+            }
+        }
+
+        /* Add these styles to your existing CSS */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* Hide overflow from the entire sidebar */
+}
+
+.sidebar-header {
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.user-profile {
+    flex-shrink: 0; /* Prevent user profile from shrinking */
+}
+
+.sidebar-menu {
+    flex-grow: 1; /* Allow menu to grow and fill available space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: thin; /* For Firefox */
+}
+
+/* Custom scrollbar styling (optional) */
+.sidebar-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+
+
+
+
+
+
+
+
+
+/* Add these to your existing CSS */
+.user-card.suspended-user {
+    border-left: 4px solid #dc3545;
+}
+
+.badge-suspended {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-active {
+    background-color: #28a745;
+    color: white;
+}
+
+.user-card {
+    transition: all 0.3s ease;
+}
+
+.user-card.suspended-user .user-card-img {
+    opacity: 0.7;
+}
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">Groom<span>Style</span></a>
+        </div>
+        
+        <div class="user-profile">
+            <img id="userProfile" class="userProfile" src="" alt="User Profile">
+            <h6 id="name" class="userName">Loading...</h6>
+            <p id="userEmail" class="userEmail">Loading...</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <p class="menu-header">Main</p>
+            <a href="index.html"  id="dashboard-link">
+    <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+</a>
+<a href="packages.html"  id="packages-link">
+    <i class="fas fa-box-open"></i> <span>Packages</span>
+</a>
+<a href="location.html"  id="washpoints-link">
+    <i class="fas fa-map-marker-alt"></i> <span>Wash Points</span>
+</a>
+<a href="car_detailers.html" id="vehicles-link">
+    <i class="fas fa-car"></i> <span>Car Detailers</span>
+</a>
+<a href="clients.html" class="active"  id="clients-link">
+    <i class="fas fa-users"></i> <span>Clients</span>
+</a>
+<a href="feedback.html" id="feedback-link">
+    <i class="fas fa-comments"></i> <span>Feedback</span>
+</a>
+<a href="report.html" id="report-link">
+    <i class="fas fa-chart-bar"></i> <span>Report</span>
+</a>
+<a href="#" id="logout-link" onclick="logout()">
+    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="container-fluid">
+            <
+            
+            !-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-users me-2"></i> Client Management
+                </h1>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                    <i class="fas fa-plus me-2"></i> Add New Client
+                </button>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-value" id="totalUsers">0</div>
+                                <p class="stat-label">Total Users</p>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-value" id="activeUsers">0</div>
+                                <p class="stat-label">Active Users</p>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="stat-value" id="suspendedUsers">0</div>
+                                <p class="stat-label">Suspended</p>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="fas fa-user-slash"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search and Filter -->
+            <div class="search-bar">
+                <div class="row">
+                    <div class="col-md-8 mb-3 mb-md-0">
+                        <div class="position-relative">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search users by name, email, or ID...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="statusFilter">Status</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="all">All Users</option>
+                                <option value="active">Active</option>
+                                <option value="suspended">Suspended</option>
+                                <option value="new">New</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-filter mt-3">
+                    <div class="btn-group" role="group" id="filterButtons">
+                        <button type="button" class="btn btn-outline-primary active" data-status="all">All (<span id="countAll">0</span>)</button>
+                        <button type="button" class="btn btn-outline-primary" data-status="active">Active (<span id="countActive">0</span>)</button>
+                        <button type="button" class="btn btn-outline-primary" data-status="suspended">Suspended (<span id="countSuspended">0</span>)</button>
+                        <button type="button" class="btn btn-outline-primary" data-status="new">New (<span id="countNew">0</span>)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Users List -->
+            <div class="row" id="usersContainer">
+                <!-- User cards will be dynamically added here -->
+                <!--div class="col-md-4 mb-4">
+                    <div class="user-card">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-card-img">
+                        <div class="user-card-body">
+                            <h5 class="user-card-name">John Doe</h5>
+                            <p class="user-card-email">john.doe@example.com</p>
+                            <span class="badge badge-active mb-3">Active</span>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                <button class="btn btn-sm btn-outline-danger">Suspend</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="user-card">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="user-card-img">
+                        <div class="user-card-body">
+                            <h5 class="user-card-name">Jane Smith</h5>
+                            <p class="user-card-email">jane.smith@example.com</p>
+                            <span class="badge badge-suspended mb-3">Suspended</span>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                <button class="btn btn-sm btn-outline-success">Activate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="user-card">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="User" class="user-card-img">
+                        <div class="user-card-body">
+                            <h5 class="user-card-name">Robert Johnson</h5>
+                            <p class="user-card-email">robert.j@example.com</p>
+                            <span class="badge badge-new mb-3">New</span>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                <button class="btn btn-sm btn-outline-danger">Suspend</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div-->
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add New Client</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addClientForm">
+                        <div class="mb-3">
+                            <label for="userEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add Client</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            // Check screen size on load
+            checkScreenSize();
+            
+            // Add event listener for window resize
+            window.addEventListener('resize', checkScreenSize);
+            
+            function checkScreenSize() {
+                if (window.innerWidth <= 991.98) {
+                    // Medium screens - collapsed sidebar
+                    sidebar.classList.remove('expanded');
+                    mainContent.classList.remove('expanded');
+                } else {
+                    // Large screens - expanded sidebar
+                    sidebar.classList.add('expanded');
+                    mainContent.classList.add('expanded');
+                }
+                
+                if (window.innerWidth <= 767.98) {
+                    // Mobile - hidden sidebar
+                    sidebar.style.width = '0';
+                    sidebar.style.transform = 'translateX(-100%)';
+                } else {
+                    // Tablet/Desktop - visible sidebar
+                    sidebar.style.width = '';
+                    sidebar.style.transform = '';
+                }
+            }
+            
+            // Simulate loading user data
+            setTimeout(() => {
+                document.getElementById('name').textContent = 'Admin User';
+                document.getElementById('userEmail').textContent = 'admin@groomstyle.com';
+            }, 500);
+        });
+    </script>
+</body>
+<script src="../logout.js"></script>
+<script src="accounts.js"></script>
+<script src="clients.js"></script>
+</html>
