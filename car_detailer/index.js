@@ -65,7 +65,7 @@ const createToast = (message, type) => {
 
 document.addEventListener('DOMContentLoaded', function() {
     // Base API URL
-    const BASE_URL = 'http://localhost:8000/api';
+    const BASE_URL = 'https://car-wash-nb3z.onrender.com/api';
     
     // DOM Elements
     const availabilityToggle = document.getElementById('availabilityToggle');

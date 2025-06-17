@@ -1,5 +1,5 @@
 // Base API URL
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://car-wash-nb3z.onrender.com/api';
 
 // Global variables
 let selectedPackage = {};
