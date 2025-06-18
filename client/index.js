@@ -140,6 +140,8 @@ async function loadInitialData() {
         
         // Load packages
         const packagesResponse = await fetch(`${API_BASE_URL}/get/services`, {
+        //const packagesResponse = await fetch('http://127.0.0.1:8000/api/get/services', {
+
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,

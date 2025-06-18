@@ -88,8 +88,10 @@ userDateEls.forEach(el => {
 
     } catch (error) {
         createToast("Error loading user details: " + error.message, "error");
-         localStorage.removeItem('token');
+       
+          localStorage.removeItem('token');
              window.location.href = "../index.html";
+        
     }
 }
 

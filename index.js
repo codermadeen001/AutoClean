@@ -146,7 +146,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     userImgUrl: userData.photoURL
                 };
 
-                const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/google/login', {
+    const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/google/login', {
+
+ // const response = await fetch('http://127.0.0.1:8000/api/google/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -154,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify(data),
                     credentials: 'include'
                 });
-
+console.log(data)
                 const responseData = await response.json();
 
                 if (responseData.success) {
