@@ -47,6 +47,13 @@ async function loadUserDetails() {
             window.location.href = "../index.html";
         }
 
+        
+        if (data.status == true) {
+            alert("Account is suspended!")
+            localStorage.removeItem('token');
+            window.location.href = "../index.html";
+        }
+
         function updateElements(selector, updateFn) {
             document.querySelectorAll(selector).forEach(el => updateFn(el));
         }
