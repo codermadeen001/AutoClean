@@ -1,5 +1,6 @@
 // Base API URL
-const API_BASE_URL = 'https://car-wash-nb3z.onrender.com/api';
+const API_BASE_URL = 'https://backend-carwash-mx6p.onrender.com/api';
+//https://car-wash-backend-bfew.onrender.com
 
 // Global variables
 let selectedPackage = {};

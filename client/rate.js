@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const barberCardTemplate = document.getElementById("barberCardTemplate");
     
     // API endpoints
-    const BASE_URL = "https://car-wash-nb3z.onrender.com/api";
+    const BASE_URL = "https://backend-carwash-mx6p.onrender.com/api";
     const ENDPOINTS = {
       GET_BARBERS: `${BASE_URL}/rate/get-car-detailers-to-rate`,
       RATE_BARBER: `${BASE_URL}/rate/rate`,
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
   
         // Make actual API call to get barbers
-        const response = await fetch("https://car-wash-nb3z.onrender.com/api/rate/get-car-detailers-to-rate", {
+        const response = await fetch("https://backend-carwash-mx6p.onrender.com/api/rate/get-car-detailers-to-rate", {
           method: "GET",
           headers: { 
             "Content-Type": "application/json",

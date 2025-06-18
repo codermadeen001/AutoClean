@@ -1,5 +1,5 @@
 // Configuration
-const BASE_URL = "https://car-wash-nb3z.onrender.com/api";
+const BASE_URL = "https://backend-carwash-mx6p.onrender.com/api";
 
 // Global variables
 let allUsers = [];

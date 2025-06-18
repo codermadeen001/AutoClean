@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
             loginBtn.disabled = true;
 
             try {
-                const response = await fetch('https://car-wash-nb3z.onrender.com/api/login/', {
+                const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
             forgetPasswordLink.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Sending...';
             
             try {
-                const response = await fetch('https://car-wash-nb3z.onrender.com/api/password/reset/', {
+                const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/password/reset', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     userImgUrl: userData.photoURL
                 };
 
-                const response = await fetch('https://car-wash-nb3z.onrender.com/api/google/login/', {
+                const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/google/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

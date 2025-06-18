@@ -1,13 +1,13 @@
 // Global variables
 let allBarbers = []; // Store all barbers for filtering
-const API_BASE_URL = 'https://car-wash-nb3z.onrender.com/api';
+const API_BASE_URL = 'https://backend-carwash-mx6p.onrender.com/api';
 let barberId;
 let currentShift;
 
 // Load barber statistics from server (fallback if available)
 async function loadBarberStats() {
     try {
-        const response = await fetch('https://car-wash-nb3z.onrender.com/api/washer-stats');
+        const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/washer-stats');
         const data = await response.json();
         
         if (data.success && data.data) {
@@ -54,7 +54,7 @@ function setupModalHandlers() {
         const name = document.getElementById("barberName").value;
         
         try {
-            const response = await fetch('https://car-wash-nb3z.onrender.com/api/washer/create', {
+            const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/washer/create', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({name, email})
@@ -130,7 +130,7 @@ function setupEventListeners() {
 // Fetch barbers from the API
 async function fetchBarbers() {
     try {
-        const response = await fetch('https://car-wash-nb3z.onrender.com/api/get-all-washers');
+        const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/get-all-washers');
         if (!response.ok) {
             createToast('Failed to fetch barbers', 'error');
         }

@@ -659,7 +659,7 @@
             }
             
             try {
-                const response = await axios.delete(`https://car-wash-nb3z.onrender.com/api/delete/feedback/${feedbackId}`);
+                const response = await axios.delete(`https://backend-carwash-mx6p.onrender.com/api/delete/feedback/${feedbackId}`);
                 
                 if (response.data.success) {
                     createToast('Feedback deleted successfully', 'success');
@@ -748,7 +748,7 @@
         // Fetch feedbacks from server
         async function fetchFeedbacks() {
             try {
-                const response = await axios.get('https://car-wash-nb3z.onrender.com/api/all-feedback');
+                const response = await axios.get('https://backend-carwash-mx6p.onrender.com/api/all-feedback');
                 
                 if (!response.data.success) {
                     createToast(response.data.message || "Failed to load feedbacks", "error");

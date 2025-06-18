@@ -126,7 +126,7 @@
 
 
                     
-const API_BASE_URL = 'https://car-wash-nb3z.onrender.com/api/bookings';
+const API_BASE_URL = 'https://backend-carwash-mx6p.onrender.com/api/bookings';
 
 // Toast functionality
 const createToast = (message, type) => {
@@ -373,7 +373,7 @@ const cancelBooking = async (rental_id, status) => {
 // Fetch summary stats data
 const fetchStats = async () => {
     try {
-        const response = await fetch('https://car-wash-nb3z.onrender.com/api/rental-stats');
+        const response = await fetch('https://backend-carwash-mx6p.onrender.com/api/rental-stats');
         
         if (!response.ok) {
             throw new Error('Failed to fetch dashboard statistics');

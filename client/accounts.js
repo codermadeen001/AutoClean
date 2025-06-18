@@ -1,4 +1,4 @@
-const API = "https://car-wash-nb3z.onrender.com"; 
+const API = "https://backend-carwash-mx6p.onrender.com"; 
 
 function formatDateTime(timestamp) {
     if (!timestamp) return "N/A";
@@ -27,7 +27,7 @@ async function loadUserDetails() {
     }
 
     try {
-        const server_response = await fetch(`${API}/api/user/`, {
+        const server_response = await fetch(`${API}/api/user`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
