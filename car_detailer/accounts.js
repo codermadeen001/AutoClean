@@ -27,7 +27,7 @@ async function loadUserDetails() {
     }
 
     try {
-        const server_response = await fetch(`${API}/api/user/`, {
+        const server_response = await fetch(`${API}/api/user`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
